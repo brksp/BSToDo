@@ -23,10 +23,23 @@ class ToDoListViewController: UIViewController {
         createDummyList()
         // Do any additional setup after loading the view.
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        removeSelectedStatesOfTableView()
+        super.viewDidDisappear(animated)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func removeSelectedStatesOfTableView() {
+        if let indexPaths = listTableView.indexPathsForSelectedRows {
+            for indexPath in indexPaths {
+                listTableView.deselectRow(at: indexPath, animated: true)
+            }
+        }
     }
     
     @IBAction func addNewToDoButtonAction(_ sender: Any) {
@@ -68,13 +81,20 @@ class ToDoListViewController: UIViewController {
         
         let second = ToDoListItem()
         second.id = UUID().uuidString
-        second.note = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a luctus nisi. Pellentesque mauris leo, vehicula non bibendum eu, tempor at urna. Praesent sodales elit libero, ac ultrices ligula porttitor dictum. Etiam mattis hendrerit urna nec dignissim. Donec blandit mauris orci, in suscipit dui facilisis quis. Aenean ut pellentesque purus, non faucibus erat. Duis aliquam blandit mauris, ut vulputate nisl dignissim eget. Proin elemen"
+        second.note = "Lorem ipsum dolor sit amet, "
         second.priority = 2
         second.date = Date()
         
         listArray.add(first)
         listArray.add(second)
         listTableView.reloadData()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Note" {
+            let viewController = segue.destination as! ToDoViewController
+            viewController.toDoItem = sender as! ToDoListItem
+        }
     }
 }
 
@@ -93,7 +113,7 @@ extension ToDoListViewController : UITableViewDataSource {
         let item = listArray.object(at: indexPath.row) as! ToDoListItem
 //        cell.titleLabel.text = item.title! + String(describing: item.date)
         cell.spotLabel.text = item.note!
-
+        print("\(indexPath.row) ---  \(String(describing: item.id!))")
         return cell
     }
 }
@@ -117,7 +137,8 @@ extension ToDoListViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "Note", sender: nil)
+        let item = listArray.object(at: indexPath.row) as! ToDoListItem
+        performSegue(withIdentifier: "Note", sender: item)
     }
 }
 

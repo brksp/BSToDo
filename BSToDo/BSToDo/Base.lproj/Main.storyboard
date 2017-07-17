@@ -13,7 +13,7 @@
         <!--Notes-->
         <scene sceneID="BbV-sz-Y0n">
             <objects>
-                <viewController storyboardIdentifier="NotesViewController" id="XdC-iu-eFv" customClass="ToDoListViewController" customModule="BSToDo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ToDoListViewController" id="XdC-iu-eFv" customClass="ToDoListViewController" customModule="BSToDo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W8G-CF-PsM"/>
                         <viewControllerLayoutGuide type="bottom" id="ZZJ-f2-1Wi"/>
@@ -120,7 +120,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Notes" id="x7G-Ft-ar3">
                         <barButtonItem key="backBarButtonItem" title=" " id="1si-Hd-9Ey"/>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="6Hz-za-guY">
+                        <barButtonItem key="rightBarButtonItem" id="6Hz-za-guY">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="IuV-LN-U9E">
                                 <rect key="frame" x="337" y="11" width="22" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -136,17 +136,17 @@
                     </navigationItem>
                     <connections>
                         <outlet property="listTableView" destination="dgx-uE-5gg" id="YBf-1G-dfP"/>
-                        <segue destination="jhZ-bI-bZA" kind="show" identifier="Note" id="zv4-nu-dra"/>
+                        <segue destination="jhZ-bI-bZA" kind="show" identifier="Note" id="109-hO-91I"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O2n-35-5W7" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2080.8000000000002" y="136.28185907046478"/>
+            <point key="canvasLocation" x="2222" y="135"/>
         </scene>
-        <!--To Do View Controller-->
+        <!--Note-->
         <scene sceneID="YdR-cL-oo1">
             <objects>
-                <viewController storyboardIdentifier="NoteEditViewController" id="jhZ-bI-bZA" customClass="ToDoViewController" customModule="BSToDo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ToDoViewController" id="jhZ-bI-bZA" customClass="ToDoViewController" customModule="BSToDo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Qjs-UM-vNj"/>
                         <viewControllerLayoutGuide type="bottom" id="n5T-fB-3cI"/>
@@ -156,7 +156,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Hq7-qt-RpX">
-                                <rect key="frame" x="15" y="64" width="345" height="327"/>
+                                <rect key="frame" x="15" y="74" width="345" height="327"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YgH-kb-bEy">
                                         <rect key="frame" x="0.0" y="0.0" width="345" height="50"/>
@@ -183,6 +183,9 @@
                                         <date key="date" timeIntervalSinceReferenceDate="522004725.69093603">
                                             <!--2017-07-17 17:18:45 +0000-->
                                         </date>
+                                        <date key="minimumDate" timeIntervalSinceReferenceDate="-978267600">
+                                            <!--1970-01-01 11:00:00 +0000-->
+                                        </date>
                                         <connections>
                                             <action selector="datePickerAction:" destination="jhZ-bI-bZA" eventType="valueChanged" id="0cW-95-cGu"/>
                                         </connections>
@@ -207,7 +210,7 @@
                                 </subviews>
                             </stackView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ta0-sY-p82">
-                                <rect key="frame" x="15" y="401" width="345" height="266"/>
+                                <rect key="frame" x="15" y="411" width="345" height="256"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -220,26 +223,45 @@
                             <constraint firstItem="Hq7-qt-RpX" firstAttribute="leading" secondItem="Nlo-3W-XZD" secondAttribute="leading" constant="15" id="DkF-gR-dpw"/>
                             <constraint firstAttribute="trailing" secondItem="ta0-sY-p82" secondAttribute="trailing" constant="15" id="IVH-w6-nMD"/>
                             <constraint firstItem="ta0-sY-p82" firstAttribute="leading" secondItem="Nlo-3W-XZD" secondAttribute="leading" constant="15" id="cRP-vX-zWe"/>
-                            <constraint firstItem="Hq7-qt-RpX" firstAttribute="top" secondItem="Nlo-3W-XZD" secondAttribute="topMargin" constant="64" id="nES-tV-yuO"/>
+                            <constraint firstItem="Hq7-qt-RpX" firstAttribute="top" secondItem="Nlo-3W-XZD" secondAttribute="topMargin" constant="74" id="nES-tV-yuO"/>
                             <constraint firstAttribute="trailing" secondItem="Hq7-qt-RpX" secondAttribute="trailing" constant="15" id="vLm-XN-0T0"/>
                             <constraint firstAttribute="bottomMargin" secondItem="ta0-sY-p82" secondAttribute="bottom" id="ymn-Nw-Xco"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Note" id="kLL-bT-OEX">
+                        <barButtonItem key="rightBarButtonItem" id="Fsj-ob-bfd">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="z7q-EB-QUU">
+                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Add">
+                                    <color key="titleColor" red="0.039215686270000001" green="0.78039215689999997" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="addButtonAction:" destination="jhZ-bI-bZA" eventType="touchUpInside" id="ajU-d2-ZW6"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="dateLabel" destination="MP3-Mm-k1T" id="0dk-bf-HuH"/>
                         <outlet property="datePicker" destination="xL8-Hy-wxb" id="KSZ-At-udk"/>
+                        <outlet property="segmentControl" destination="6BI-b2-xbz" id="PqF-ke-Aun"/>
+                        <outlet property="textView" destination="ta0-sY-p82" id="fj4-FE-5Cy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ab2-MY-hmg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2956" y="136.28185907046478"/>
+            <point key="canvasLocation" x="3007" y="136"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WXN-dQ-X4p">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ey8-ZT-eBV" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ToDoListViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="ey8-ZT-eBV" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="64k-uC-peI">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="64k-uC-peI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.039215686270000001" green="0.78039215689999997" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
