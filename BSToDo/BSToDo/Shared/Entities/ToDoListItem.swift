@@ -14,4 +14,5 @@ class ToDoListItem: Object{
     var priority: Int?
     var date: Date?
     var id: String?
+    
 }
