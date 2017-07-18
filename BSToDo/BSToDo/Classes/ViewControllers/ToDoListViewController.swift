@@ -126,8 +126,17 @@ extension ToDoListViewController : UITableViewDataSource {
         let item = isSearching ? searchedList[indexPath.row] : results[indexPath.row]
         cell.titleLabel.text = item.value(forKey: "note")! as? String
         cell.spotLabel.text = String(describing: item.value(forKey: "date")!)
-        print("\(indexPath.row) ---  \(String(describing: item.value(forKey: "id")!))")
-        
+        cell.realm = try! Realm()
+        cell.toDoItem = item
+        if (item.value(forKey: "done")! as? Bool)! {
+            cell.checkBoxButton.isSelected = true
+            cell.titleLabel.alpha = 0.3
+            cell.spotLabel.alpha = 0.3
+        }else {
+            cell.checkBoxButton.isSelected = false
+            cell.titleLabel.alpha = 1
+            cell.spotLabel.alpha = 1
+        }
         return cell
     }
 }
@@ -146,7 +155,7 @@ extension ToDoListViewController : UITableViewDelegate {
         if editingStyle == .delete {
             try! realm.write {
                 realm.delete(objectForIndexPath(indexPath: indexPath)!)
-                results = realm.objects(ToDoListItem.self).sorted(byKeyPath: "id")
+                sortList()
                 if (searchBar.text?.characters.count)! > 0 {
                     searchWith(text: searchBar.text!)
                 }else {

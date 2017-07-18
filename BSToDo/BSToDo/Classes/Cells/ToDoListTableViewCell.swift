@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ToDoListTableViewCell: UITableViewCell {
-
+    var realm: Realm!
+    var toDoItem: ToDoListItem!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var spotLabel: UILabel!
     
@@ -25,7 +27,10 @@ class ToDoListTableViewCell: UITableViewCell {
             titleLabel.alpha = 0.3
             spotLabel.alpha = 0.3
         }
+        update()
     }
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -36,5 +41,15 @@ class ToDoListTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    func update() {
+        try! realm.write {
+            let note = toDoItem.value(forKey: "note") as! String
+            let date = toDoItem.value(forKey: "date") as! Date
+            let id = toDoItem.value(forKey: "id") as! String
+            let priority = (toDoItem.value(forKey: "priority") as! NSNumber)
+            
+            realm.create(ToDoListItem.self, value: ["note": note, "priority": priority, "date" : date, "id": id, "done": checkBoxButton.isSelected], update: true)
+        }
+    }
 }

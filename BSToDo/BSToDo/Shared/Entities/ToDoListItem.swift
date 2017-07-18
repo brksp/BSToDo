@@ -14,6 +14,7 @@ class ToDoListItem: Object{
     var priority: NSNumber = NSNumber(value: 0)
     var date: Date?
     var id: String?
+    var done: Bool = false
     
     override static func primaryKey() -> String? {
         return "id"
