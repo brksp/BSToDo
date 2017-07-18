@@ -26,6 +26,7 @@ class ToDoViewController: UIViewController {
         datePicker.minimumDate = Date()
         dateLabel.text = String(describing: Date())
         handleExistingNote()
+        
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
@@ -45,6 +46,7 @@ class ToDoViewController: UIViewController {
             setDoneButton(title: "Update")
         }else {
             setDoneButton(title: "Add")
+            textView.becomeFirstResponder()
         }
     }
     
