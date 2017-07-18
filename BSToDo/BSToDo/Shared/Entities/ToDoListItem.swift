@@ -11,7 +11,11 @@ import RealmSwift
 
 class ToDoListItem: Object{
     var note: String?
-    var priority: Int?
+    var priority: NSNumber = NSNumber(value: 0)
     var date: Date?
     var id: String?
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

@@ -38,7 +38,7 @@
                                             </segments>
                                             <color key="tintColor" red="0.039215686270000001" green="0.78039215689999997" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
-                                                <action selector="segmentControlDidChange:" destination="XdC-iu-eFv" eventType="valueChanged" id="cMo-I5-UJh"/>
+                                                <action selector="segmentControlDidChange:" destination="XdC-iu-eFv" eventType="valueChanged" id="cz4-hv-r7s"/>
                                             </connections>
                                         </segmentedControl>
                                     </subviews>
@@ -58,13 +58,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="46.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAI-vZ-3Dn">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAI-vZ-3Dn">
                                                     <rect key="frame" x="55" y="5" width="305" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRR-91-ZjO">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRR-91-ZjO">
                                                     <rect key="frame" x="55" y="27.5" width="305" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
@@ -136,6 +136,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="listTableView" destination="dgx-uE-5gg" id="YBf-1G-dfP"/>
+                        <outlet property="segmentControl" destination="VPH-WO-cW8" id="ZAO-Ns-0op"/>
                         <segue destination="jhZ-bI-bZA" kind="show" identifier="Note" id="109-hO-91I"/>
                     </connections>
                 </viewController>
@@ -238,6 +239,9 @@
                                 <state key="normal" title="Add">
                                     <color key="titleColor" red="0.039215686270000001" green="0.78039215689999997" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" red="0.039215686270000001" green="0.78039215689999997" blue="0.38431372549999998" alpha="0.39876472513089006" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="addButtonAction:" destination="jhZ-bI-bZA" eventType="touchUpInside" id="ajU-d2-ZW6"/>
                                 </connections>
@@ -248,6 +252,7 @@
                     <connections>
                         <outlet property="dateLabel" destination="MP3-Mm-k1T" id="0dk-bf-HuH"/>
                         <outlet property="datePicker" destination="xL8-Hy-wxb" id="KSZ-At-udk"/>
+                        <outlet property="doneButton" destination="z7q-EB-QUU" id="zFu-9c-36H"/>
                         <outlet property="segmentControl" destination="6BI-b2-xbz" id="PqF-ke-Aun"/>
                         <outlet property="textView" destination="ta0-sY-p82" id="fj4-FE-5Cy"/>
                     </connections>

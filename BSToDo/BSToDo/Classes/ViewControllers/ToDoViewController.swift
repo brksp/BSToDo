@@ -14,12 +14,14 @@ class ToDoViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var doneButton: UIButton!
     
     var realm: Realm!
     var toDoItem: ToDoListItem!
     
     override func viewDidLoad() {
         realm = try! Realm()
+        
         datePicker.isHidden = true
         datePicker.minimumDate = Date()
         dateLabel.text = String(describing: Date())
@@ -36,20 +38,43 @@ class ToDoViewController: UIViewController {
     
     func handleExistingNote() {
         if toDoItem != nil {
-            datePicker.date = toDoItem.date!
-            textView.text = toDoItem.note!
-            segmentControl.selectedSegmentIndex = toDoItem.priority!
+            datePicker.date = toDoItem.value(forKey: "date") as! Date
+            textView.text = toDoItem.value(forKey: "note") as! String
+            segmentControl.selectedSegmentIndex = (toDoItem.value(forKey: "priority") as! NSNumber).intValue
+            dateLabel.text = String(describing: toDoItem.value(forKey: "date")!)
+            setDoneButton(title: "Update")
+        }else {
+            setDoneButton(title: "Add")
         }
+    }
+    
+    func setDoneButton(title: String) {
+        doneButton.setTitle(title, for: .normal)
+        doneButton.setTitle(title, for: .highlighted)
     }
     
     func add() {
         try! realm.write {
-            realm.create(ToDoListItem.self, value: ["note": "1231qweqewq", "priority": "", "date" : "", "id": UUID().uuidString], update: true)
+            let note = textView.text ?? ""
+            let date = datePicker.date
+            let id = UUID().uuidString
+            let priority = NSNumber(value: segmentControl.selectedSegmentIndex)
+            
+            realm.create(ToDoListItem.self, value: ["note": note, "priority": priority, "date" : date, "id": id], update: true)
+            let _ = navigationController?.popViewController(animated: true)
         }
     }
     
     func update() {
-        
+        try! realm.write {
+            let note = textView.text ?? ""
+            let date = datePicker.date
+            let id = toDoItem.value(forKey: "id") as! String
+            let priority = String(format: "%d", segmentControl.selectedSegmentIndex)
+            
+            realm.create(ToDoListItem.self, value: ["note": note, "priority": priority, "date" : date, "id": id], update: true)
+            let _ = navigationController?.popViewController(animated: true)
+        }
     }
     
     @IBAction func addButtonAction(_ sender: Any) {

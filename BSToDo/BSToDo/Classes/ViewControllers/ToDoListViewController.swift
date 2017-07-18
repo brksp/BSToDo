@@ -7,21 +7,35 @@
 //
 
 import UIKit
-
+import RealmSwift
 class ToDoListViewController: UIViewController {
+    enum SortType {
+        case Priority, Date
+    }
+    
     //MARK: - Properties
     @IBOutlet weak var listTableView: UITableView!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     
     lazy var searchBar = UISearchBar(frame: CGRect.zero)
-    
+    var realm: Realm!
     var listArray: NSMutableArray = []
+    var results = try! Realm().objects(ToDoListItem.self).sorted(byKeyPath: "date")
+    var searchedList = try! Realm().objects(ToDoListItem.self).sorted(byKeyPath: "id")
+    var isSearching: Bool = false
     //MARK: - View Cyle
     override func viewDidLoad() {
+        realm = try! Realm()
         setSearchBar()
         navigationItem.titleView = searchBar
         super.viewDidLoad()
-        createDummyList()
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        sortList()
+        listTableView.reloadData()
+        super.viewWillAppear(animated)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -43,10 +57,22 @@ class ToDoListViewController: UIViewController {
     }
     
     @IBAction func addNewToDoButtonAction(_ sender: Any) {
+        performSegue(withIdentifier: "Note", sender: nil)
     }
     
-    @IBAction func segmentControlDidChange(_ sender: Any) {
+    @IBAction func segmentControlDidChange(_ sender: UISegmentedControl) {
+        sortList()
+        listTableView.reloadData()
     }
+    
+    func sortList() {
+        if segmentControl.selectedSegmentIndex == SortType.Date.hashValue {
+            results = realm.objects(ToDoListItem.self).sorted(byKeyPath: "date", ascending: false)
+        }else {
+            results = realm.objects(ToDoListItem.self).sorted(byKeyPath: "priority", ascending: false)
+        }
+    }
+    
     
     fileprivate func setSearchBar() {
         searchBar.backgroundColor = UIColor.clear
@@ -71,29 +97,13 @@ class ToDoListViewController: UIViewController {
             }
         }
     }
-    
-    func createDummyList() {
-        let first = ToDoListItem()
-        first.id = UUID().uuidString
-        first.note = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a luctus nisi. Pellentesque mauris leo, vehicula non bibendum eu, tempor at urna. Praesent sodales elit libero, ac ultrices ligula porttitor dictum. Etiam mattis hendrerit urna nec dignissim. Donec blandit mauris orci, in suscipit dui facilisis quis. Aenean ut pellentesque purus, non faucibus erat. Duis aliquam blandit mauris, ut vulputate nisl dignissim eget. Proin elemen"
-        first.priority = 3
-        first.date = Date()
-        
-        let second = ToDoListItem()
-        second.id = UUID().uuidString
-        second.note = "Lorem ipsum dolor sit amet, "
-        second.priority = 2
-        second.date = Date()
-        
-        listArray.add(first)
-        listArray.add(second)
-        listTableView.reloadData()
-    }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Note" {
             let viewController = segue.destination as! ToDoViewController
-            viewController.toDoItem = sender as! ToDoListItem
+            if let item = sender as? ToDoListItem {
+                viewController.toDoItem = item
+            }
         }
     }
 }
@@ -105,15 +115,19 @@ extension ToDoListViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listArray.count
+        if isSearching {
+            return searchedList.count
+        }
+        return results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoListTableViewCell", for: indexPath) as! ToDoListTableViewCell
-        let item = listArray.object(at: indexPath.row) as! ToDoListItem
-//        cell.titleLabel.text = item.title! + String(describing: item.date)
-        cell.spotLabel.text = item.note!
-        print("\(indexPath.row) ---  \(String(describing: item.id!))")
+        let item = isSearching ? searchedList[indexPath.row] : results[indexPath.row]
+        cell.titleLabel.text = item.value(forKey: "note")! as? String
+        cell.spotLabel.text = String(describing: item.value(forKey: "date")!)
+        print("\(indexPath.row) ---  \(String(describing: item.value(forKey: "id")!))")
+        
         return cell
     }
 }
@@ -130,51 +144,46 @@ extension ToDoListViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            //            try! realm.write {
-            ////                realm.delete(objectForIndexPath(indexPath: indexPath)!)
-            //            }
+            try! realm.write {
+                realm.delete(objectForIndexPath(indexPath: indexPath)!)
+                results = realm.objects(ToDoListItem.self).sorted(byKeyPath: "id")
+                if (searchBar.text?.characters.count)! > 0 {
+                    searchWith(text: searchBar.text!)
+                }else {
+                    listTableView.reloadData()
+                }
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = listArray.object(at: indexPath.row) as! ToDoListItem
+        let item = results[indexPath.row]
         performSegue(withIdentifier: "Note", sender: item)
+    }
+    
+    func objectForIndexPath(indexPath: IndexPath) -> ToDoListItem? {
+        return results[indexPath.row]
     }
 }
 
 //MARK: - UISearchBarDelegate
 extension ToDoListViewController : UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if SearchHelper.sharedInstance.searchList.count == 0{
-//            loadingIndicator.startAnimating()
-//        }else {
-//            loadingIndicator.stopAnimating()
-//            searchWith(text: searchBar.text!)
-//            searchListCollectionView.reloadData()
-//        }
-//        if searchText.characters.count == 0 {
-//            loadingIndicator.stopAnimating()
-//        }
+        isSearching = (searchBar.text?.characters.count)! > 0 ? true : false
+        searchWith(text: searchBar.text!)
+        listTableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        searchBar.resignFirstResponder()
+        searchBar.resignFirstResponder()
+        isSearching = false
+        listTableView.reloadData()
     }
     
     func searchWith(text: String) {
-//        let searchBrandList: [SearchBrandItem] = SearchHelper.sharedInstance.searchList[0] as! [SearchBrandItem]
-//        let searchModelList: [SearchModelItem] = SearchHelper.sharedInstance.searchList[1] as! [SearchModelItem]
-//        let searchAuctionList: [SearchAuctionItem] = SearchHelper.sharedInstance.searchList[2] as! [SearchAuctionItem]
-//        
-//        brandList = searchBrandList.filter({($0.brandName?.lowercased().contains(text.lowercased()))!})
-//        modelList = searchModelList.filter({($0.modelName?.lowercased().contains(text.lowercased()))!})
-//        auctionList = searchAuctionList.filter({($0.titleName?.lowercased().contains(text.lowercased()))!})
-//        searchListCollectionView.isHidden = false
-//        resultNotFoundLabel.isHidden = true
-//        if brandList.count == 0 && modelList.count == 0 && auctionList.count == 0 && text != "" {
-//            resultNotFoundLabel.isHidden = false
-//            resultNotFoundLabel.text = String(format: "\"%@\" için sonuç bulunamadı.", text)
-//            searchListCollectionView.isHidden = true
-//        }
+        searchedList = realm.objects(ToDoListItem.self).filter(NSPredicate(format:
+            "note contains[c] %@", text))
+        
+        listTableView.reloadData()
     }
 }
