@@ -72,7 +72,7 @@ class ToDoViewController: UIViewController {
             let note = textView.text ?? ""
             let date = datePicker.date
             let id = toDoItem.value(forKey: "id") as! String
-            let priority = String(format: "%d", segmentControl.selectedSegmentIndex)
+            let priority = NSNumber(value: segmentControl.selectedSegmentIndex)
             
             realm.create(ToDoListItem.self, value: ["note": note, "priority": priority, "date" : date, "id": id], update: true)
             let _ = navigationController?.popViewController(animated: true)
